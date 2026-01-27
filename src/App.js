@@ -1,14 +1,15 @@
-
 import './App.css';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import moment from 'moment/moment';
+import 'moment/locale/ar-ma';
 
 // importation des componants MUI
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import CloudIcon from '@mui/icons-material/Cloud';
 import Button from '@mui/material/Button';
+import CloudIcon from '@mui/icons-material/Cloud';
 
  const theme = createTheme({
     typography: {
@@ -18,10 +19,12 @@ import Button from '@mui/material/Button';
   });
 function App() {
   const [data, setData] = useState(null);
+  moment.locale('ar-ma');
+  const url = 'https://api.openweathermap.org/data/2.5/weather?lat=34.99955&lon=-4.89114&lang=ar&appid=aade230efd632809ec71052dcc8534bb&units=metric';
+
   useEffect(() => {
-    
     // Exemple de requête API avec axios
-    axios.get('https://api.openweathermap.org/data/2.5/weather?lat=35.399539827405754&lon=-5.089178182019226&lang=ar&appid=aade230efd632809ec71052dcc8534bb&units=metric')
+    axios.get(url)
       .then(response => {
         console.log(response.data.name);
         setData(response.data);
@@ -46,7 +49,7 @@ function App() {
                   {data ? data.name : '...'}
                 </Typography>
                 <Typography variant="h5" gutterBottom>
-                  الاثنين 26/06/2024
+                  {moment().format('LLLL')}
                 </Typography>
               </div>
               {/* === ville et temps === */}
@@ -55,11 +58,14 @@ function App() {
               <div dir="rtl" style={{display:"flex", justifyContent:"space-between", alignItems:"center", marginTop:"20px"}}>
                 {/* température */}
                 <div>
-                  <Typography variant="h1" style={{textAlign:"right"}}>
+                  <div style={{display:"flex"}}>
+                    <Typography variant="h1" style={{textAlign:"right"}}>
                     {data ? Math.round(data.main.temp) : '...'}°C
-                  </Typography>
-                  {/* todo: temperature Image */}
-                  <div>{data ? data.weather[0].icon : '...'}</div>
+                    </Typography>
+                    {/* todo: temperature Image */}
+                    <div>{data && <img src={`http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`} alt="Weather Icon" style={{width: "100px", height: "100px"}} />}</div>
+                  </div>
+                  
                   {/* météo description */}
                   <Typography variant="h6" style={{textAlign:"right"}}>
                     {data ? data.weather[0].description : '...'}
@@ -74,7 +80,7 @@ function App() {
                 {/* ====température==== */}
                 <div>
                   {/*  météo image */}
-                  <CloudIcon style={{fontSize:"200px"}} />
+                  <CloudIcon style={{fontSize:"200px", opacity:"0.7"}} />
                   {/* ===  météo image === */}
                 </div>
               </div>
