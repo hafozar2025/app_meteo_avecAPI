@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import moment from 'moment/moment';
 import 'moment/locale/ar-ma';
+import 'moment/locale/fr';
+import { useTranslation } from 'react-i18next';
 
 // importation des componants MUI
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -17,11 +19,21 @@ import CloudIcon from '@mui/icons-material/Cloud';
       fontWeight: 600,
     },
   });
-function App() {
-  const [data, setData] = useState(null);
   moment.locale('ar-ma');
-  const url = 'https://api.openweathermap.org/data/2.5/weather?lat=34.99955&lon=-4.89114&lang=ar&appid=aade230efd632809ec71052dcc8534bb&units=metric';
 
+
+function App() {
+  const { t, i18n } = useTranslation();
+
+  // état pour stocker les données de l'API
+  const [data, setData] = useState(null);
+  const [locale, setLocale] = useState('ar');
+
+  // URL de l'API météo
+
+  const url = `https://api.openweathermap.org/data/2.5/weather?lat=34.79955&lon=-4.59114&lang=${locale}&appid=aade230efd632809ec71052dcc8534bb&units=metric`;
+
+  
   useEffect(() => {
     // Exemple de requête API avec axios
     axios.get(url)
@@ -33,18 +45,25 @@ function App() {
         console.error('il ya un erreur', error);
       });
   }, []);
+
+  // fonction pour changer la langue
+  const handleLanguageClick = () => {
+    locale === 'en' ? setLocale('ar') : setLocale('en');
+    i18n.changeLanguage(locale);
+    moment.locale(locale === 'en' ? 'fr' : 'ar-ma');
+  };
  
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
         <Container maxWidth="sm" style={{background:"#f0f0f0", padding:"20px", borderRadius:"10px", marginTop:"20px"}}>
-          <h1>مرحبا بكم في تطبيق الطقس</h1>
+          <h1>{t("Welcome to the weather app")}</h1>
           {/* CARD */}
-          <div style={{background:"rgb(28 52 91 / 36%)", padding:"20px", color:"white", borderRadius:"10px", boxShadow:"0 4px 8px rgba(0, 0, 0, 0.1)"}}>
+          <div  style={{background:"rgb(28 52 91 / 36%)", padding:"20px", color:"white", borderRadius:"10px", boxShadow:"0 4px 8px rgba(0, 0, 0, 0.1)"}}>
             {/* CARD CONTENT */}
-            <div>
+            <div dir={locale === 'en' ? 'ltr' : 'rtl'}>
               {/* ville et temps */}
-              <div style={{textAlign:"right", direction:"rtl", display:"flex", alignItems:"flex-end", justifyContent:"start", gap:"20px"}}>
+              <div  style={{textAlign:"right", display:"flex", alignItems:"flex-end", justifyContent:"start", gap:"20px"}}>
                 <Typography variant="h2" style={{fontWeight:"600"}}>
                   {data ? data.name : '...'}
                 </Typography>
@@ -55,7 +74,7 @@ function App() {
               {/* === ville et temps === */}
               <hr />
               {/* prévisions */}
-              <div dir="rtl" style={{display:"flex", justifyContent:"space-between", alignItems:"center", marginTop:"20px"}}>
+              <div  style={{display:"flex", justifyContent:"space-between", alignItems:"center", marginTop:"20px"}}>
                 {/* température */}
                 <div>
                   <div style={{display:"flex"}}>
@@ -72,7 +91,7 @@ function App() {
                   </Typography>
                   {/* Min & Max */}
                   <Typography variant="h6" style={{textAlign:"right"}}>
-                    {data ? `Min: ${Math.round(data.main.temp_min)}°C` : '...'} | Max: {data ? `${Math.round(data.main.temp_max)}°C` : '...'}
+                    {t("Min")}: {data ? `${Math.round(data.main.temp_min)}°C` : '...'} |{t("Max")}: {data ? `${Math.round(data.main.temp_max)}°C` : '...'}
                   </Typography>
                   {/* === Min & Max === */}
 
@@ -90,8 +109,8 @@ function App() {
           </div>
           {/* == CARD == */}
           <div dir='rtl' style={{marginTop:"20px", display:"flex", justifyContent:"end"}}>
-            <Button variant="contained">
-              أنجليزي
+            <Button variant="contained" onClick={handleLanguageClick}>
+              {locale === 'en' ? 'English' : 'العربية'}
             </Button>
           </div>
       </Container>
