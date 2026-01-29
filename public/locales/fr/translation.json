@@ -1,0 +1,18 @@
+{
+    "Welcome to the weather app": "bienvenue dans l'application météo",
+    "temperature": "température",
+    "humidity": "humidité",
+    "wind_speed": "vitesse du vent",
+    "loading": "chargement en cours...",
+    "error": "une erreur s'est produite lors de la récupération des données météorologiques.",
+    "Max": "température maximale",
+    "Min": "température minimale",
+    "Get Weather": "obtenir les informations météorologiques",
+    "C°": "°C",
+    "F°": "°F",
+    "Please select your language": "veuillez sélectionner votre langue",
+    "Please select your units": "veuillez sélectionner vos unités",
+    "language": "langue",
+    "city name": "nom de la ville",
+    "units": "unités"
+}
