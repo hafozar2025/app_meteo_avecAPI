@@ -19,7 +19,7 @@ import CloudIcon from '@mui/icons-material/Cloud';
       fontWeight: 600,
     },
   });
-  moment.locale('ar-ma');
+
 
 
 function App() {
@@ -29,10 +29,16 @@ function App() {
   const [data, setData] = useState(null);
   const [locale, setLocale] = useState('ar');
 
+  // moment.locale('ar-ma');
+
   // URL de l'API météo
 
   const url = `https://api.openweathermap.org/data/2.5/weather?lat=34.79955&lon=-4.59114&lang=${locale}&appid=aade230efd632809ec71052dcc8534bb&units=metric`;
 
+  useEffect(() => {
+    i18n.changeLanguage(locale);
+    moment.locale(locale === 'en' ? 'fr' : 'ar-ma');
+  }, [locale, i18n]);
   
   useEffect(() => {
     // Exemple de requête API avec axios
@@ -76,24 +82,25 @@ function App() {
               {/* prévisions */}
               <div  style={{display:"flex", justifyContent:"space-between", alignItems:"center", marginTop:"20px"}}>
                 {/* température */}
-                <div>
-                  <div style={{display:"flex"}}>
+                <div dir={locale === 'en' ? 'ltr' : 'rtl'}>
+                  <div dir={locale === 'en' ? 'ltr' : 'rtl'} style={{display:"flex"}}>
                     <Typography variant="h1" style={{textAlign:"right"}}>
                     {data ? Math.round(data.main.temp) : '...'}°C
                     </Typography>
-                    {/* todo: temperature Image */}
+                    {/* icone de météo */}
                     <div>{data && <img src={`http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`} alt="Weather Icon" style={{width: "100px", height: "100px"}} />}</div>
                   </div>
-                  
-                  {/* météo description */}
-                  <Typography variant="h6" style={{textAlign:"right"}}>
-                    {data ? data.weather[0].description : '...'}
-                  </Typography>
-                  {/* Min & Max */}
-                  <Typography variant="h6" style={{textAlign:"right"}}>
-                    {t("Min")}: {data ? `${Math.round(data.main.temp_min)}°C` : '...'} |{t("Max")}: {data ? `${Math.round(data.main.temp_max)}°C` : '...'}
-                  </Typography>
-                  {/* === Min & Max === */}
+                  <div  style={{ display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", gap:"10px"}}>
+                    {/* météo description */}
+                    <Typography variant="h6" style={{textAlign:"right"}}>
+                      {data ? data.weather[0].description : '...'}
+                    </Typography>
+                    {/* Min & Max */}
+                    <Typography variant="h6" style={{textAlign:"right"}}>
+                      {t("Min")}: {data ? `${Math.round(data.main.temp_min)}°C` : '...'} | {t("Max")}: {data ? `${Math.round(data.main.temp_max)}°C` : '...'}
+                    </Typography>
+                    {/* === Min & Max === */}
+                  </div>
 
                 </div>
                 {/* ====température==== */}
@@ -108,9 +115,9 @@ function App() {
             {/* ====CARD CONTENT=== */}
           </div>
           {/* == CARD == */}
-          <div dir='rtl' style={{marginTop:"20px", display:"flex", justifyContent:"end"}}>
+          <div dir={locale === 'en' ? 'ltr' : 'rtl'} style={{marginTop:"20px", display:"flex", justifyContent:"end"}}>
             <Button variant="contained" onClick={handleLanguageClick}>
-              {locale === 'en' ? 'English' : 'العربية'}
+              {locale === 'en' ? 'العربية' :'English' }
             </Button>
           </div>
       </Container>
