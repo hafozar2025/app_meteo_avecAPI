@@ -7,12 +7,13 @@
     "error": "une erreur s'est produite lors de la récupération des données météorologiques.",
     "Max": "température maximale",
     "Min": "température minimale",
-    "Get Weather": "obtenir les informations météorologiques",
+    "Get Weather": "Valider",
     "C°": "°C",
     "F°": "°F",
     "Please select your language": "veuillez sélectionner votre langue",
     "Please select your units": "veuillez sélectionner vos unités",
-    "language": "langue",
-    "city name": "nom de la ville",
-    "units": "unités"
+    "Language": "la langue",
+    "City": "la ville",
+    "Units": "unités",
+    "Enter city name": "entrer la ville"
 }

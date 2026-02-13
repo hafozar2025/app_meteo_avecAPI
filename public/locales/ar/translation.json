@@ -12,9 +12,11 @@
     "F°": "فهرنهايت",
     "Please select your language": "الرجاء اختيار لغتك",
     "Please select your units": "الرجاء اختيار وحداتك",
-    "language": "اللغة",
+    "Language": "اللغة",
     "city name": "اسم المدينة",
-    "units": "الوحدات",
+    "Units": "الوحدات",
     "latitude": "خط العرض",
-    "longitude": "خط الطول"
+    "longitude": "خط الطول",
+    "City":"المدينة",
+    "Enter city name": "أدخل اسم المدينة"
 }

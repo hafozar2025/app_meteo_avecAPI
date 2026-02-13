@@ -6,7 +6,7 @@ import moment from 'moment/moment';
 import { useEffect } from "react";
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from "react-redux";
-import { language, fetchWeather } from "./weatherSlice";
+import { fetchWeather } from "./weatherSlice";
 import CircularProgress from "@mui/material/CircularProgress";
 
 
@@ -25,6 +25,9 @@ export default function ShowWeather(){
     });
   
     const locale = useSelector((state) => state.weather.locale);
+    const unit = useSelector((state) => state.weather.unit);
+    console.log("unité de store: ", unit)
+    const uniteAffiche = unit === "metric"? "°C": unit === "imperial"? "°F":"°K"
     
     const { t, i18n } = useTranslation();
     
@@ -32,7 +35,7 @@ export default function ShowWeather(){
     useEffect(() => {
         i18n.changeLanguage(locale);
         moment.locale(locale === "ar"? "ar-ma" : locale);
-    }, []);
+    }, [locale]);
     
 
     return (
@@ -58,26 +61,26 @@ export default function ShowWeather(){
                   <div dir={locale === 'ar' ? 'rtl' : 'ltr'}>
                     <div dir={locale === 'ar' ? 'rtl' : 'ltr'} style={{display:"flex"}}>
                       <Typography variant="h1" style={{textAlign:"right"}}>
-                      {Math.round(data?.main?.temp)??  <CircularProgress/>}°C
+                      {Math.round(data?.main?.temp)??  <CircularProgress/>}{uniteAffiche}
                       </Typography>
                       {/* icone de météo */}
-                      <div>{data && <img src={`http://openweathermap.org/img/wn/${data?.weather?.[0]?.icon}@2x.png`} alt="Weather Icon" style={{width: "100px", height: "100px"}} />}</div>
+                      <div>{data && <img src={`http://openweathermap.org/img/wn/${data?.weather?.[0]?.icon}@2x.png`} alt="Weather Icon" style={{width: "150px", height: "150px"}} />}</div>
                     </div>
                     <div  style={{ display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", gap:"10px"}}>
                       {/* météo description */}
-                      <Typography variant="h6" style={{textAlign:"right"}}>
+                      <Typography variant="h4" style={{textAlign:"right"}}>
                         {data?.weather?.[0]?.description ?? <CircularProgress/>}
                       </Typography>
                       {/* Min & Max */}
                       <Typography variant="h6" style={{textAlign:"right"}}>
-                        {t("Min")}: {data? `${Math.round(data?.main?.temp_min)}${t("C°")}`: <CircularProgress/>} | {t("Max")}: {`${Math.round(data?.main?.temp_max)}${t("C°")}`?? <CircularProgress/>}
+                        {t("Min")}: {data? `${Math.round(data?.main?.temp_min)}${t(uniteAffiche)}`: <CircularProgress/>} | {t("Max")}: {`${Math.round(data?.main?.temp_max)}${t(uniteAffiche)}`?? <CircularProgress/>}
                       </Typography>
                       {/* === Min & Max === */}
                     </div>
 
                   </div>
                   {/* ====température==== */}
-                  <div>
+                  <div >
                     {/*  météo image */}
                     <CloudIcon style={{fontSize:"200px", opacity:"0.7"}} />
                     {/* ===  météo image === */}

@@ -10,11 +10,14 @@ import Radio from "@mui/material/Radio";
 import Button from "@mui/material/Button";
 
 // import HOOKS
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fetchWeather } from "./weatherSlice";
 import { useTranslation } from 'react-i18next';
 import {language, unit, city} from "./weatherSlice";
+import 'moment/locale/ar-ma';
+import 'moment/locale/fr';
+// import moment from 'moment/moment';
 
 export default function FormWeather() {
     console.log("render de formWeather")
@@ -33,7 +36,16 @@ export default function FormWeather() {
     const units = [
         { value: "metric", label: "Celsius" },
         { value: "imperial", label: "Fahrenheit" },
+        { value: "standard", label: "Kelvin" },
     ];
+
+    const { t, i18n } = useTranslation();
+        
+        
+    useEffect(() => {
+        i18n.changeLanguage(locale);
+        // moment.locale(locale === "ar"? "ar-ma" : locale);
+    }, [locale]);
     // handle submit form
     const handleSubmit = () => {
         console.log("submit form with ", ville, locale, unite);
@@ -49,17 +61,17 @@ export default function FormWeather() {
             <Grid container spacing={2} alignItems="center">
                 <Grid size= {{xs:12, sm:4}}>
                     <TextField
-                        label="City"
+                        label={t("City")}
                         value={ville}
                         onChange={(e) => setCity(e.target.value)}
                         fullWidth
-                        placeholder="Enter city name"
+                        placeholder={t("Enter city name")}
                     />
                 </Grid>
 
-                <Grid  size= {{xs:12, sm:4}}>
-                    <FormControl component="fieldset">
-                        <FormLabel component="legend">Language</FormLabel>
+                <Grid  size= {{xs:12, sm:4}} >
+                    <FormControl component="fieldset" style ={{ border:"solid 1px", paddingLeft:"5px"}}>
+                        <FormLabel component="legend">{t("Language")}</FormLabel>
                         <RadioGroup
                             row
                             aria-label="language"
@@ -80,8 +92,8 @@ export default function FormWeather() {
                 </Grid>
 
                 <Grid  size= {{xs:12, sm:4}}>
-                    <FormControl component="fieldset">
-                        <FormLabel component="legend">Units</FormLabel>
+                    <FormControl component="fieldset" style ={{border:"solid 1px", paddingLeft:"5px"}}>
+                        <FormLabel component="legend">{t("Units")}</FormLabel>
                         <RadioGroup
                             row
                             aria-label="units"
@@ -107,7 +119,7 @@ export default function FormWeather() {
                         color="primary"
                         onClick={handleSubmit}
                     >
-                        Valider
+                        {t("Get Weather")}
                     </Button>
                 </Grid>
             </Grid>
